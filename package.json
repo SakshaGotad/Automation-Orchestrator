@@ -1,0 +1,23 @@
+{
+  "name": "automation-orchestrator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Distributed automation orchestration system using microservices",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run start:dev -w @apps/api-gateway\" \"npm run start:dev -w @apps/ingestion-service\" \"npm run start:dev -w @apps/orchestrator-service\" \"npm run start:dev -w @apps/execution-worker\"",
+    
+    "build": "npm run build --workspaces",
+    
+    "start:gateway": "npm run start:dev -w @apps/api-gateway",
+    "start:ingestion": "npm run start:dev -w @apps/ingestion-service",
+    "start:orchestrator": "npm run start:dev -w @apps/orchestrator-service",
+    "start:worker": "npm run start:dev -w @apps/execution-worker"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
