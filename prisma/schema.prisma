@@ -11,3 +11,45 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Workflow {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+
+  steps       Json     // actions (email, webhook, etc.)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  executions  Execution[]
+  triggers    Trigger[]
+}
+
+model Execution {
+  id          String   @id @default(uuid())
+
+  workflowId  String
+  status      String   // pending | running | success | failed
+
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  createdAt   DateTime @default(now())
+
+  workflow    Workflow @relation(fields: [workflowId], references: [id])
+}
+
+model Trigger {
+  id          String   @id @default(uuid())
+
+  workflowId  String
+  type        String   // webhook | schedule | event
+
+  config      Json     // dynamic config
+
+  createdAt   DateTime @default(now())
+
+  workflow    Workflow @relation(fields: [workflowId], references: [id])
+}
