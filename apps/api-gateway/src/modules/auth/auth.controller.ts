@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
-import { PrismaService } from '../database/prisma.service';
 import { GoogleOAuthUser } from './google.strategy';
 import { ConnectionService } from '../connection/connection.service';
 
@@ -17,7 +16,7 @@ type GoogleCallbackRequest = Request & {
 
 @Controller('auth')
 export class AuthController {
- constructor(private readonly connectionService: ConnectionService) {}
+  constructor(private readonly connectionService: ConnectionService) {}
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
@@ -34,17 +33,11 @@ export class AuthController {
       throw new UnauthorizedException('Google OAuth authentication failed.');
     }
 
-    // Build data in a mutable map so editor-stale Prisma typings do not block valid runtime fields.
-  
-
     const connection =
-    await this.connectionService.upsertGoogleConnection(
-      "user_1", // temporary
-      {
+      await this.connectionService.upsertGoogleConnection(oauthUser.userId, {
         accessToken: oauthUser.accessToken,
         refreshToken: oauthUser.refreshToken,
-      }
-    );
+      });
     return {
       success: true,
       connectionId: connection.id,
