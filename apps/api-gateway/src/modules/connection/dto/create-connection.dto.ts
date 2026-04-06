@@ -1,6 +1,6 @@
-import { IsString } from "class-validator";
+import { IsString } from 'class-validator';
 
 export class CreateConnectionDto {
-    @IsString()
-    app!: string;
+  @IsString()
+  provider!: string;
 }

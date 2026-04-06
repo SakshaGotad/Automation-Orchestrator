@@ -12,12 +12,12 @@ datasource db {
 }
 
 model Connection {
-  id          String   @id @default(uuid())
-  userId      String
-  app         String
-  accessToken String?
-
-  createdAt   DateTime @default(now())
+  id           String   @id @default(cuid())
+  userId       String
+  provider     String
+  accessToken  String
+  refreshToken String?
+  createdAt    DateTime @default(now())
 }
 
 model Workflow {
