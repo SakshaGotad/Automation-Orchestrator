@@ -13,7 +13,7 @@
     "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "noEmit": false,
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
@@ -22,7 +22,12 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-    "@repo/database": ["../../packages/database/src"]
-  }
+      "@repo/database": [
+        "../../packages/database/src"
+      ]
+    },
+    "types": [
+      "node"
+    ]
   }
 }
