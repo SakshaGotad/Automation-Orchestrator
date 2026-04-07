@@ -26,13 +26,15 @@ model Workflow {
   description String?
   isActive    Boolean  @default(true)
  userId      String  
-  steps       Json     // actions (email, webhook, etc.)
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  executions  Execution[]
+ 
   triggers    Trigger[]
+
+  actions Action[]
+  executions  Execution[]
 }
 
 model Execution {
@@ -49,14 +51,30 @@ model Execution {
   workflow    Workflow @relation(fields: [workflowId], references: [id])
 }
 
+model Action {
+  id           String   @id @default(uuid())
+
+  workflowId   String
+  step         Int
+  app          String
+  event        String
+  config       Json
+  connectionId String?
+
+  createdAt    DateTime @default(now())
+
+  workflow Workflow @relation(fields: [workflowId], references: [id])
+}
+
 model Trigger {
   id          String   @id @default(uuid())
 
   workflowId  String
-  type        String   // webhook | schedule | event
-
- event       String 
+  type        String?  // webhook | schedule | event
+  app         String
+  event       String 
   config      Json     // dynamic config
+  connectionId String?
 
   createdAt   DateTime @default(now())
 
