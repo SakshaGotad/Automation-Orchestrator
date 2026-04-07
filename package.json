@@ -8,16 +8,30 @@
     "packages/*"
   ],
   "scripts": {
+    "prisma:generate": "prisma generate",
+    "predev": "npm run prisma:generate",
+    "prebuild": "npm run prisma:generate",
     "dev": "concurrently \"npm run start:dev -w @apps/api-gateway\" \"npm run start:dev -w @apps/ingestion-service\" \"npm run start:dev -w @apps/orchestrator-service\" \"npm run start:dev -w @apps/execution-worker\"",
-    
     "build": "npm run build --workspaces",
-    
     "start:gateway": "npm run start:dev -w @apps/api-gateway",
     "start:ingestion": "npm run start:dev -w @apps/ingestion-service",
     "start:orchestrator": "npm run start:dev -w @apps/orchestrator-service",
     "start:worker": "npm run start:dev -w @apps/execution-worker"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "@types/node": "^25.5.2",
+    "@types/pg": "^8.20.0",
+    "concurrently": "^8.2.2",
+    "prisma": "^7.6.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.6.0",
+    "@prisma/client": "^7.6.0",
+    "@prisma/extension-accelerate": "^3.0.1",
+    "class-validator": "^0.15.1",
+    "dotenv": "^17.4.0",
+    "pg": "^8.20.0"
   }
 }
