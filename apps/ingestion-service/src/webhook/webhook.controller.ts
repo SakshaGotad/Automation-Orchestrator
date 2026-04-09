@@ -5,10 +5,10 @@ import { WebhookService } from './webhook.service';
 export class WebhookController {
     constructor (private readonly webhookService: WebhookService) {}
 
-    @Post(':provider')
-    async handleWebhook(@Param('provider') provider: string, 
+    @Post(':app')
+    async handleWebhook(@Param('app') app: string, 
     @Query('connectionId') connectionId: string,
     @Body() payload: any) {
-        return this.webhookService.processWebhook({ provider, connectionId, payload });
+        return this.webhookService.processWebhook({ app, connectionId, payload });
     }
 }
