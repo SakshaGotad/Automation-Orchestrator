@@ -7,7 +7,7 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 
 @Module({
-  imports: [KafkaModule],
+  imports: [KafkaModule,PrismaModule],
   controllers: [AppController],
   providers: [AppService,KafkaConsumerService,OrchestratorService],
 })
