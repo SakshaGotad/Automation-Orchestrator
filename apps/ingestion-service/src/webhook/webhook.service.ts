@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-
+import { KafkaService } from 'src/kafka/kafka.service';
 @Injectable()
 export class WebhookService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService,
+    private readonly kafkaService: KafkaService,
+  ) {}
   async processWebhook(data: {
     app: string;
     connectionId: string;
@@ -51,6 +53,20 @@ export class WebhookService {
     });
     // 3. Send to Kafka
     console.log('matched workflow',workflows.length)
+   const events = workflows.map((workflow) => ({
+  workflowId: workflow.id,
+  userId,
+  trigger: {
+    app,
+    event,
+  },
+  payload,
+  timestamp: new Date().toISOString(),
+}));
+
+for (const eventObj of events) {
+  await this.kafkaService.sendEvent('workflow.triggered', eventObj);
+}
 
     return {
       message: 'Webhook received successfully',
