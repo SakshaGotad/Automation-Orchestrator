@@ -14,13 +14,10 @@ export class RegisterWebhookService {
         console.log('⚠️ No webhook registration for:', app);
     }
   }
-  async registerGithubWebhook(connection:any,trigger:any){
-    const {accessToken} = connection; 
-    const {repoUrl} = trigger.config;
-  const [owner, repoName] = repoUrl
-  .replace('.git', '')
-  .split('/')
-  .slice(-2);
+  async registerGithubWebhook(connection: any, trigger: any) {
+    const { accessToken } = connection;
+    const { repoUrl } = trigger.config;
+    const [owner, repoName] = repoUrl.replace('.git', '').split('/').slice(-2);
     const url = `https://api.github.com/repos/${owner}/${repoName}/hooks`;
     const headers = {
       Authorization: `token ${accessToken}`,
@@ -35,18 +32,19 @@ export class RegisterWebhookService {
       },
       events: ['push', 'pull_request'],
     };
-    const response = await fetch(url, { method: 'POST', headers, body:JSON.stringify(body) });
-     if (!response.ok) {
-    console.error('❌ GitHub webhook error:', response);
-    throw new Error('Failed to register GitHub webhook');
-  }
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      console.error('❌ GitHub webhook error:', response);
+      throw new Error('Failed to register GitHub webhook');
+    }
 
     const data = await response.json();
-     console.log('✅ GitHub webhook registered:', data.id);
+    console.log('✅ GitHub webhook registered:', data.id);
 
     return data;
-
-    
-
   }
 }
