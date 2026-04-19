@@ -45,7 +45,7 @@ model Execution {
 
   startedAt   DateTime?
   completedAt DateTime?
-
+retryCount  Int      @default(0) 
   createdAt   DateTime @default(now())
 
   workflow    Workflow @relation(fields: [workflowId], references: [id])
