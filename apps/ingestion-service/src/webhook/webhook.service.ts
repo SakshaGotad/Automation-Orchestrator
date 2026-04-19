@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { KafkaService } from 'src/kafka/kafka.service';
-@Injectable()
+
 export class WebhookService {
   constructor(private readonly prisma: PrismaService,
     private readonly kafkaService: KafkaService,

@@ -42,11 +42,27 @@ export class OrchestratorService {
 
       // 2. Execute actions one by one
       for (const action of actions) {
+        let success = false;
+        let attempts = 0;
+        const maxRetries = 3;
+        while(!success && attempts < maxRetries){
+          try{
+            attempts++;
+             // (for now just log)
+        // Later: call real integrations
+            await this.executeAction(action, payload);
+            success = true;
+          }catch(error){
+            console.error(`❌ Step ${action.step} failed:`, error.message);
+            if(attempts >= maxRetries){
+              throw error;
+            }
+          }
+        }
         console.log(`⚙️ Executing step ${action.step}:`, action.app);
 
-        // (for now just log)
-        // Later: call real integrations
-        await this.executeAction(action, payload);
+       
+       
       }
 
       await this.prisma.client.execution.update({
