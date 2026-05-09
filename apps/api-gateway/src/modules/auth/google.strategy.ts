@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-google-oauth20';
+import { ConfigService } from '@nestjs/config';
 
 export type GoogleOAuthUser = {
   userId: string;
@@ -12,11 +13,11 @@ export type GoogleOAuthUser = {
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-  constructor() {
-    const clientID = process.env.GOOGLE_CLIENT_ID;
-    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+  constructor(private readonly configService: ConfigService) {
+    const clientID = configService.get<string>('GOOGLE_CLIENT_ID');
+    const clientSecret = configService.get<string>('GOOGLE_CLIENT_SECRET');
     const callbackURL =
-      process.env.GOOGLE_CALLBACK_URL ??
+      configService.get<string>('GOOGLE_CALLBACK_URL') ??
       'http://localhost:3003/auth/google/callback';
 
     if (!clientID || !clientSecret) {

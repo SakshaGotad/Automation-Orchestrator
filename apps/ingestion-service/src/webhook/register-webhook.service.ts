@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class RegisterWebhookService {
-  constructor() {}
+  constructor(private readonly configService: ConfigService) {}
 
   async registerWebhook(data: { app: string; connection: any; trigger: any }) {
     const { app, connection, trigger } = data;
@@ -27,7 +28,7 @@ export class RegisterWebhookService {
     const body = {
       name: 'web',
       config: {
-        url: process.env.WEBHOOK_URL,
+        url: this.configService.get<string>('WEBHOOK_URL'),
         content_type: 'json',
       },
       events: ['push', 'pull_request'],
